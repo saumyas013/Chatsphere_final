@@ -1,5 +1,4 @@
 
-
 package com.collegeproject.chatgptclone.controller;
 
 import com.collegeproject.chatgptclone.model.ChatMessage;
@@ -30,27 +29,41 @@ public class ChatController {
      * It expects a JSON body with a "message" field.
      * Requires authentication.
      *
-     * @param payload A map containing the user's message.
+     * @param payload   A map containing the user's message.
      * @param principal The authenticated user's principal.
      * @return A ResponseEntity containing the bot's response message.
      */
     @PostMapping("/send")
     @ResponseBody
-    public ResponseEntity<String> sendMessage(@RequestBody Map<String, String> payload, Principal principal) { // NEW: Principal parameter
+    public ResponseEntity<String> sendMessage(@RequestBody Map<String, String> payload, Principal principal) { // NEW:
+                                                                                                               // Principal
+                                                                                                               // parameter
         if (principal == null) {
-            // This should ideally be caught by Spring Security before reaching here,
-            // but it's a good defensive check.
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated.");
         }
-        String userId = principal.getName(); // In Spring Security, principal.getName() is the username
+        String userId = principal.getName();
         String userMessage = payload.get("message");
+        String requestId = payload.get("requestId"); // New: Extract requestId
+        String imageBase64 = payload.get("imageBase64"); // NEW: Extract image
 
-        if (userMessage == null || userMessage.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Message cannot be empty.");
+        if ((userMessage == null || userMessage.trim().isEmpty()) && (imageBase64 == null || imageBase64.isEmpty())) {
+            return ResponseEntity.badRequest().body("Message or Image is required.");
         }
-        System.out.println("Received message from frontend: " + userMessage);
-        String botResponse = chatService.sendMessage(userId, userMessage); // Pass userId
+        System.out.println("Received message from " + userId + " (ID: " + requestId + "): " + userMessage);
+
+        String botResponse = chatService.sendMessage(userId, userMessage, requestId, imageBase64); // Pass image
         return ResponseEntity.ok(botResponse);
+    }
+
+    @PostMapping("/cancel")
+    @ResponseBody
+    public ResponseEntity<String> cancelRequest(@RequestBody Map<String, String> payload) {
+        String requestId = payload.get("requestId");
+        if (requestId != null && !requestId.isEmpty()) {
+            chatService.cancelRequest(requestId);
+            return ResponseEntity.ok("Cancellation requested.");
+        }
+        return ResponseEntity.badRequest().body("Missing requestId");
     }
 
     /**

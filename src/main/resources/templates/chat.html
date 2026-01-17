@@ -1,4 +1,4 @@
-
+<!-- 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,226 +10,226 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         /* Ensure html and body take full viewport height and remove default margins/padding */
-        html, body {
-            height: 100%;
-            width: 100%; /* Ensure full width */
-            margin: 0;
-            padding: 0; /* REMOVED padding from body */
-            overflow: hidden; /* Prevent body scrollbars, chat-messages handles its own scroll */
-            box-sizing: border-box; /* Include padding/border in element's total dimensions */
-        }
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent body scrollbars */
+    box-sizing: border-box;
+}
 
-        body {
-            padding : 0;
-            margin : 0;
-            font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5; /* Light grey background */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            /* REMOVED padding: 20px; from body */
-            /* REMOVED min-height: 100vh; from body as html/body height: 100% covers it */
-            box-sizing: border-box;
-        }
-        .chat-container {
-            background-color: #ffffff;
-            border-radius: 1rem; /* Rounded corners for desktop */
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            width: 100%; /* Take full width of parent (body) */
-            max-width: 1200px; /* Max width for desktop */
-            display: flex;
-            flex-direction: column;
-            overflow: hidden; /* Hide overflow for the container itself */
-            height: 100vh; /* Make container take full viewport height */
-            margin: 0; /* REMOVED margin from chat-container */
-        }
-        /* Further increase max-width for extra large screens */
-        @media (min-width: 1280px) { /* Tailwind's 'xl' breakpoint */
-            .chat-container {
-                max-width: 1400px; /* Even wider on very large monitors */
-            }
-        }
-        .chat-header {
-            background-color: #4f46e5;
-            color: white;
-            padding: 1rem 1.5rem;
-            text-align: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            border-top-left-radius: 1rem;
-            border-top-right-radius: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .chat-header-title {
-            flex-grow: 1;
-            text-align: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        .chat-header-links {
-            display: flex;
-            gap: 1rem;
-            font-size: 1rem;
-            font-weight: 500;
-            align-items: center;
-        }
-        .chat-header-links a, .chat-header-links button {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            transition: background-color 0.2s;
-            border: none;
-            background: none;
-            cursor: pointer;
-        }
-        .chat-header-links a:hover, .chat-header-links button:hover {
-            background-color: #6366f1;
-        }
-        .chat-messages {
-            flex-grow: 1;
-            padding: 1.5rem;
-            overflow-y: auto; /* Enable scrolling for messages */
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            scroll-behavior: smooth;
-            background-color: #fdfdfd;
-        }
-        .message-bubble {
-            max-width: 80%;
-            padding: 0.75rem 1rem;
-            border-radius: 0.75rem;
-            word-wrap: break-word;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-        .message-bubble.user {
-            background-color: #e0f2fe;
-            align-self: flex-end;
-            color: #1a202c;
-        }
-        .message-bubble.bot {
-            background-color: #f3f4f6;
-            align-self: flex-start;
-            color: #1a202c;
-        }
-        .chat-input-area {
-            display: flex;
-            padding: 1rem 1.5rem;
-            border-top: 1px solid #e2e8f0;
-            background-color: #ffffff;
-            border-bottom-left-radius: 1rem;
-            border-bottom-right-radius: 1rem;
-        }
-        .chat-input {
-            flex-grow: 1;
-            padding: 0.75rem 1rem;
-            border: 1px solid #cbd5e0;
-            border-radius: 0.75rem;
-            outline: none;
-            font-size: 1rem;
-            transition: border-color 0.2s;
-        }
-        .chat-input:focus {
-            border-color: #4f46e5;
-        }
-        .send-button {
-            background-color: #4f46e5;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 0.75rem;
-            margin-left: 1rem;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: background-color 0.2s, transform 0.1s;
-        }
-        .send-button:hover {
-            background-color: #4338ca;
-            transform: translateY(-1px);
-        }
-        .send-button:active {
-            transform: translateY(0);
-        }
-        .loading-indicator {
-            text-align: center;
-            padding: 1rem;
-            color: #6b7280;
-            font-style: italic;
-        }
-        .login-prompt-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.9);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            flex-direction: column;
-            gap: 1.5rem;
-            border-radius: 1rem; /* Match container border-radius */
-        }
-        .login-prompt-overlay p {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #374151;
-        }
-        .login-prompt-overlay a {
-            background-color: #4f46e5;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
-        .login-prompt-overlay a:hover {
-            background-color: #4338ca;
-        }
+body {
+    padding: 0;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #ffffff; /* Changed to white since the chat covers the whole screen */
+    box-sizing: border-box;
+}
 
+.chat-container {
+    background-color: #ffffff;
+    border-radius: 0; /* CHANGED: Removed rounded corners for full screen look */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100vh; /* Full Viewport Height */
+    width: 100%;   /* CHANGED: Forces full width */
+    max-width: 100% !important; /* CHANGED: Overrides any max-width restrictions */
+    margin: 0;
+    box-shadow: none; /* Removed shadow as it's full screen now */
+}
 
-        /* Responsive adjustments for mobile (full edge-to-edge) */
-        @media (max-width: 768px) {
-            html, body {
-                overflow: auto; /* Allow body scroll on small screens if needed */
-            }
-            body {
-                padding: 0; /* Ensure no padding on body for mobile */
-            }
-            .chat-container {
-                height: 100vh; /* Full height on mobile */
-                margin: 0; /* No margin on mobile */
-                border-radius: 0; /* No rounded corners on mobile for edge-to-edge */
-                max-width: 100%; /* Full width on mobile */
-            }
-            .chat-header {
-                padding: 0.75rem 1rem;
-                font-size: 1.25rem;
-                border-radius: 0; /* No rounded corners */
-            }
-            .chat-messages {
-                padding: 1rem;
-                gap: 0.75rem;
-            }
-            .chat-input-area {
-                padding: 0.75rem 1rem;
-            }
-            .chat-input {
-                padding: 0.6rem 0.8rem;
-                font-size: 0.9rem;
-            }
-            .send-button {
-                padding: 0.6rem 1.2rem;
-                margin-left: 0.75rem;
-                font-size: 0.9rem;
-            }
-        }
+/* REMOVED the @media query for min-width 1280px that was restricting the width */
+
+.chat-header {
+    background-color: #4f46e5;
+    color: white;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 0; /* CHANGED: Removed corners to fit screen edges */
+    padding: 1rem 1.5rem; /* Added padding back for better look */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-header-title {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.chat-header-links {
+    display: flex;
+    gap: 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    align-items: center;
+}
+
+.chat-header-links a, .chat-header-links button {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.chat-header-links a:hover, .chat-header-links button:hover {
+    background-color: #6366f1;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    scroll-behavior: smooth;
+    background-color: #fdfdfd;
+    width: 100%; /* Ensure messages area takes full width */
+    box-sizing: border-box; /* Ensures padding doesn't break width */
+}
+
+.message-bubble {
+    max-width: 80%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    word-wrap: break-word;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.message-bubble.user {
+    background-color: #e0f2fe;
+    align-self: flex-end;
+    color: #1a202c;
+}
+
+.message-bubble.bot {
+    background-color: #f3f4f6;
+    align-self: flex-start;
+    color: #1a202c;
+}
+
+.chat-input-area {
+    display: flex;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    background-color: #ffffff;
+    border-radius: 0; /* CHANGED: Removed corners */
+    width: 100%; /* Ensure input area is full width */
+    box-sizing: border-box;
+}
+
+.chat-input {
+    flex-grow: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 0.75rem;
+    outline: none;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.chat-input:focus {
+    border-color: #4f46e5;
+}
+
+.send-button {
+    background-color: #4f46e5;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    margin-left: 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.send-button:hover {
+    background-color: #4338ca;
+    transform: translateY(-1px);
+}
+
+.send-button:active {
+    transform: translateY(0);
+}
+
+.loading-indicator {
+    text-align: center;
+    padding: 1rem;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.login-prompt-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    flex-direction: column;
+    gap: 1.5rem;
+    border-radius: 0; /* CHANGED: Match container */
+}
+
+.login-prompt-overlay p {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.login-prompt-overlay a {
+    background-color: #4f46e5;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.login-prompt-overlay a:hover {
+    background-color: #4338ca;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+    .chat-header {
+        padding: 0.75rem 1rem;
+        font-size: 1.25rem;
+    }
+    .chat-messages {
+        padding: 1rem;
+        gap: 0.75rem;
+    }
+    .chat-input-area {
+        padding: 0.75rem 1rem;
+    }
+    .chat-input {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+    }
+    .send-button {
+        padding: 0.6rem 1.2rem;
+        margin-left: 0.75rem;
+        font-size: 0.9rem;
+    }
+}
     </style>
 </head>
 <body>
@@ -335,7 +335,7 @@
             const history = await response.json();
             chatMessages.innerHTML = '';
             history.forEach(msg => {
-                displayMessage(msg.sender, msg.message);
+                displayMessage(msg.sender, msg.message, msg.imageBase64);
             });
         } catch (error) {
             console.error('Error fetching chat history:', error);
@@ -398,4 +398,777 @@
     });
 </script>
 </body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+        }
+
+        .chat-container {
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            height: 100vh;
+            width: 100%;
+        }
+
+        /* Header Styles */
+        .chat-header {
+            background-color: #4f46e5;
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .chat-header-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .chat-header-links a,
+        .chat-header-links button {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .chat-header-links a:hover,
+        .chat-header-links button:hover {
+            background-color: #6366f1;
+        }
+
+        /* Message Area */
+        .chat-messages {
+            flex-grow: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            scroll-behavior: smooth;
+            background-color: #fdfdfd;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            word-wrap: break-word;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            line-height: 1.5;
+        }
+
+        .message-bubble.user {
+            background-color: #e0f2fe;
+            /* Light Blue */
+            align-self: flex-end;
+            color: #1a202c;
+            border-bottom-right-radius: 0;
+        }
+
+        .message-bubble.bot {
+            background-color: #f3f4f6;
+            /* Light Gray */
+            align-self: flex-start;
+            color: #1a202c;
+            border-bottom-left-radius: 0;
+        }
+
+        /* Input Area */
+        .chat-input-area {
+            display: flex;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            background-color: #ffffff;
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid #cbd5e0;
+            border-radius: 0.75rem;
+            outline: none;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input:focus {
+            border-color: #4f46e5;
+        }
+
+        .chat-input:disabled {
+            background-color: #f3f4f6;
+            cursor: not-allowed;
+        }
+
+        .send-button {
+            background-color: #4f46e5;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.75rem;
+            margin-left: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .send-button:hover {
+            background-color: #4338ca;
+        }
+
+        .send-button:disabled {
+            background-color: #a5b4fc;
+            cursor: not-allowed;
+        }
+
+        /* Login Overlay */
+        .login-prompt-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            z-index: 50;
+        }
+
+        .login-prompt-overlay a {
+            background-color: #4f46e5;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+        }
+
+        /* --- NEW: Thinking Animation Styles --- */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            column-gap: 6px;
+            padding: 5px 0;
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #6b7280;
+            /* Gray dots */
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .image-preview-container {
+            display: flex;
+            align-items: center;
+            background-color: #f3f4f6;
+            padding: 0.5rem 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .image-preview-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .image-preview {
+            max-height: 80px;
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+        }
+
+        .remove-image-btn {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 12px;
+            border: none;
+        }
+
+        /* Drag Overlay */
+        .drag-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(79, 70, 229, 0.1);
+            backdrop-filter: blur(2px);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            /* Let events fall through to body initially */
+            border: 4px dashed #4f46e5;
+            box-sizing: border-box;
+        }
+
+        .drag-message {
+            background-color: white;
+            padding: 2rem 3rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #4f46e5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="chat-container">
+        <!-- Drag Overlay -->
+        <div id="dragOverlay" class="drag-overlay hidden">
+            <div class="drag-message">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-16 h-16">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                </svg>
+                Drop image here
+            </div>
+        </div>
+
+        <div class="chat-header">
+            <span class="chat-header-title">ChatSphere</span>
+            <div class="chat-header-links" id="authLinks">
+                <span id="loadingAuth" class="text-white text-sm">Checking login...</span>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="loading-indicator text-center text-gray-400 mt-4" id="loadingIndicator">Loading chat history...
+            </div>
+        </div>
+
+        <!-- Image Preview Area -->
+        <div id="imagePreviewContainer" class="image-preview-container hidden">
+            <div class="image-preview-wrapper">
+                <img id="imagePreview" src="" alt="Preview" class="image-preview">
+                <button id="removeImageBtn" class="remove-image-btn">×</button>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <button id="imageUploadBtn" class="text-gray-500 hover:text-indigo-600 mr-2" title="Upload Image">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                </svg>
+            </button>
+            <button id="ocrButton" class="text-gray-500 hover:text-indigo-600 mr-2 hidden" title="Scan Text (OCR)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+                </svg>
+            </button>
+            <input type="file" id="imageInput" accept="image/*" class="hidden">
+
+            <textarea id="messageInput" class="chat-input scroll-smooth" placeholder="Type your message..." rows="1"
+                style="resize: none; min-height: 44px; max-height: 200px; overflow-y: hidden;"></textarea>
+            <button id="sendButton" class="send-button">Send</button>
+            <button id="stopButton" class="send-button hidden" style="background-color: #ef4444;">Stop</button>
+        </div>
+
+        <div id="loginPromptOverlay" class="login-prompt-overlay hidden">
+            <p class="text-xl font-bold text-gray-700">Please log in to start chatting.</p>
+            <div class="flex gap-4">
+                <a href="/login">Login</a>
+                <a href="/signup">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const stopButton = document.getElementById('stopButton');
+        const chatMessages = document.getElementById('chatMessages');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const authLinksDiv = document.getElementById('authLinks');
+        const loginPromptOverlay = document.getElementById('loginPromptOverlay');
+        const dragOverlay = document.getElementById('dragOverlay');
+
+        // Image Upload Elements
+        const imageUploadBtn = document.getElementById('imageUploadBtn');
+        const imageInput = document.getElementById('imageInput');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const removeImageBtn = document.getElementById('removeImageBtn');
+
+        let currentImageBase64 = null;
+        let dragCounter = 0; // To handle child events correctly
+
+        // Track active requests to allow cancellation
+        // Each item: { controller: AbortController, bubbleId: string }
+        let activeRequests = [];
+
+        // ... (rest of helper functions) ...
+
+        // Drag and Drop Handler (Drop anywhere on the page)
+        const dropZone = document.body;
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Highlight drop zone
+        ['dragenter'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                dragCounter++;
+                dragOverlay.classList.remove('hidden');
+            }, false);
+        });
+
+        ['dragleave'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                dragCounter--;
+                if (dragCounter <= 0) {
+                    dragOverlay.classList.add('hidden');
+                }
+            }, false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            dragCounter = 0;
+            dragOverlay.classList.add('hidden');
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        });
+
+        // === 1. Helper: Scroll to Bottom ===
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // === 2. Helper: Display Message ===
+        // === 2. Helper: Display Message ===
+        function displayMessage(sender, message, imageBase64) {
+            const messageBubble = document.createElement('div');
+            messageBubble.classList.add('message-bubble', sender);
+
+            // 1. Handle Image
+            if (imageBase64) {
+                const imgSrc = imageBase64.startsWith('data:image') ? imageBase64 : `data:image/jpeg;base64,${imageBase64}`;
+                const img = document.createElement('img');
+                img.src = imgSrc;
+                img.style.maxWidth = '100%';
+                img.style.borderRadius = '0.5rem';
+                img.style.marginBottom = '0.5rem';
+                img.onload = () => scrollToBottom(); // Scroll when image loads
+                messageBubble.appendChild(img);
+            }
+
+            // 2. Handle Text
+            if (message) {
+                const textDiv = document.createElement('div');
+                // Escape HTML to prevent XSS (basic) - optional but good practice
+                // For now, simply replacing newlines with <br>
+                textDiv.innerHTML = message.replace(/\n/g, '<br>');
+                messageBubble.appendChild(textDiv);
+            }
+
+            chatMessages.appendChild(messageBubble);
+            scrollToBottom();
+        }
+
+        // === 3. Helper: Thinking Bubble Logic ===
+        // REFACTORED: Now returns the ID so we can remove *specific* bubbles
+        function showThinking() {
+            const bubbleId = 'thinking-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+
+            const bubble = document.createElement('div');
+            bubble.id = bubbleId;
+            bubble.classList.add('message-bubble', 'bot');
+
+            // Insert the bouncing dots HTML
+            bubble.innerHTML = `
+            <div class="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        `;
+
+            chatMessages.appendChild(bubble);
+            scrollToBottom();
+            return bubbleId;
+        }
+
+        // REFACTORED: Accepts partial ID to remove specific bubble
+        function hideThinking(bubbleId) {
+            if (!bubbleId) return;
+            const bubble = document.getElementById(bubbleId);
+            if (bubble) bubble.remove();
+        }
+
+        // === 4. Helper: UI State Management ===
+        function updateStopButton() {
+            if (activeRequests.length > 0) {
+                stopButton.classList.remove('hidden');
+                // sendButton.classList.add('hidden'); // Optional: hide send if you want? But user asked for "Next question while searching"
+            } else {
+                stopButton.classList.add('hidden');
+                // sendButton.classList.remove('hidden');
+            }
+        }
+
+        // === Image Upload Handlers ===
+        const ocrButton = document.getElementById('ocrButton');
+
+        imageUploadBtn.addEventListener('click', () => {
+            imageInput.click();
+        });
+
+        imageInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        removeImageBtn.addEventListener('click', () => {
+            currentImageBase64 = null;
+            imageInput.value = '';
+            imagePreviewContainer.classList.add('hidden');
+            ocrButton.classList.add('hidden'); // Hide OCR button
+        });
+
+        // OCR Button Logic
+        ocrButton.addEventListener('click', () => {
+            if (!currentImageBase64) return;
+            // Send special command
+            messageInput.value = '[[OCR_MODE]]';
+            sendMessage();
+        });
+
+        // Common function to handle file processing
+        function handleFiles(files) {
+            if (files && files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        currentImageBase64 = e.target.result;
+                        imagePreview.src = currentImageBase64;
+                        imagePreviewContainer.classList.remove('hidden');
+                        ocrButton.classList.remove('hidden'); // Show OCR Button
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    alert('Please drop an image file.');
+                }
+            }
+        }
+
+        // Paste Handler (Paste anywhere on the page)
+        window.addEventListener('paste', (e) => {
+            const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+            for (const item of items) {
+                if (item.kind === 'file' && item.type.startsWith('image/')) {
+                    const blob = item.getAsFile();
+                    handleFiles([blob]);
+                    e.preventDefault(); // Prevent default paste behavior (e.g. into input)
+                    return;
+                }
+            }
+        });
+
+
+
+        // Helper to get cookies (if needed in future)
+        function getCookie(name) {
+            let matches = document.cookie.match(new RegExp(
+                "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+            ));
+            return matches ? decodeURIComponent(matches[1]) : undefined;
+        }
+
+        // === 5. Core: Send Message Function ===
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            // Allow sending if there is a message OR an image
+            if (!message && !currentImageBase64) return;
+
+            // Capture current image and clear UI immediately
+            const sendingImage = currentImageBase64;
+
+            // A. Show User Message immediately
+            if (message === '[[OCR_MODE]]') {
+                displayMessage('user', '🔍 Scanning Text...', sendingImage);
+            } else {
+                displayMessage('user', message, sendingImage);
+            }
+
+            messageInput.value = ''; // Clear input immediately
+            messageInput.style.height = '44px'; // Reset height
+
+            // Clear image preview
+            currentImageBase64 = null;
+            imageInput.value = '';
+            imagePreviewContainer.classList.add('hidden');
+            ocrButton.classList.add('hidden'); // Hide OCR button
+
+            // B. Setup for this specific request
+            const controller = new AbortController();
+            const bubbleId = showThinking();
+            const requestId = 'req-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9); // Generate Request ID
+
+            // Add to active list
+            const requestObj = { controller, bubbleId, requestId };
+            activeRequests.push(requestObj);
+            updateStopButton();
+
+            try {
+                // Prepare Payload
+                const payload = {
+                    message: message,
+                    requestId: requestId
+                };
+
+                if (sendingImage) {
+                    // Remove the data URL prefix for the backend
+                    payload.imageBase64 = sendingImage.split(',')[1];
+                }
+
+                // C. Send Request to Java Backend
+                const response = await fetch('/api/chat/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload), // Send requestId and image
+                    signal: controller.signal
+                });
+
+                if (response.redirected) {
+                    window.location.href = '/login';
+                    return;
+                }
+
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        window.location.href = '/login';
+                        return;
+                    }
+                    throw new Error(`Server Error: ${response.status}`);
+                }
+
+                const botResponse = await response.text();
+
+                // D. Success
+                hideThinking(bubbleId);
+                displayMessage('bot', botResponse);
+
+            } catch (error) {
+                hideThinking(bubbleId);
+                if (error.name === 'AbortError') {
+                    displayMessage('bot', '🛑 Request stopped.');
+                    // Backend cancellation is handled by the stop button click, 
+                    // but we can also fire it here if needed. 
+                    // However, the stop button click is more reliable for the user intent.
+                } else {
+                    console.error('Error sending message:', error);
+                    displayMessage('bot', '⚠️ Oops! I couldn\'t reach the AI server.');
+                }
+            } finally {
+                // E. Cleanup
+                activeRequests = activeRequests.filter(req => req !== requestObj);
+                updateStopButton();
+                scrollToBottom();
+                messageInput.focus();
+            }
+        }
+
+        // === 6. Core: Stop Logic ===
+        stopButton.addEventListener('click', () => {
+            // Abort ALL active requests
+            activeRequests.forEach(req => {
+                req.controller.abort(); // Cancel frontend fetch
+                hideThinking(req.bubbleId);
+
+                // NEW: Tell backend to cancel this specific request ID
+                fetch('/api/chat/cancel', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ requestId: req.requestId })
+                }).catch(err => console.error("Failed to send cancel signal", err));
+            });
+            activeRequests = [];
+            updateStopButton();
+        });
+
+        // === 7. Core: Auth & Init ===
+        async function updateAuthHeader() {
+            try {
+                const response = await fetch('/api/auth/status');
+                const data = await response.json();
+
+                if (data.loggedIn) {
+                    authLinksDiv.innerHTML = `
+                    <span class="text-sm mr-2">👤 ${data.username}</span>
+                    <form action="/logout" method="post" style="display:inline;">
+                        <button type="submit" class="text-sm bg-red-500 hover:bg-red-600 px-3 py-1 rounded">Logout</button>
+                    </form>
+                `;
+                    loginPromptOverlay.classList.add('hidden');
+                    fetchChatHistory();
+                } else {
+                    loginPromptOverlay.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Auth Check Failed', error);
+                loginPromptOverlay.classList.remove('hidden');
+            }
+        }
+
+        async function fetchChatHistory() {
+            try {
+                const response = await fetch('/api/chat/history');
+                if (response.redirected) {
+                    window.location.href = '/login';
+                    return;
+                }
+                const history = await response.json();
+
+                chatMessages.innerHTML = ''; // Clear loading text
+
+                if (history.length === 0) {
+                    chatMessages.innerHTML = '<div class="text-center text-gray-400 mt-10">Start a conversation!</div>';
+                }
+
+                history.forEach(msg => {
+                    displayMessage(msg.sender, msg.message, msg.imageBase64);
+                });
+            } catch (error) {
+                console.error('History Error', error);
+                chatMessages.innerHTML = '<div class="text-center text-red-400 mt-4">Failed to load history.</div>';
+            }
+        }
+
+        // === Event Listeners ===
+        sendButton.addEventListener('click', sendMessage);
+
+        // Auto-resize textarea
+        messageInput.addEventListener('input', function () {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+            if (this.value === '') {
+                this.style.height = '44px'; // Reset to min-height
+            }
+        });
+
+        // Handle Enter key
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault(); // Prevent newline
+                sendMessage();
+            }
+        });
+
+        // Start App
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAuthHeader();
+        });
+    </script>
+</body>
+
 </html>

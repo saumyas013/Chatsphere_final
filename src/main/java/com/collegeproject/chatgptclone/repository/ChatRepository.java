@@ -22,7 +22,6 @@
 //    List<ChatMessage> findAllByOrderByTimestampAsc();
 //}
 
-
 package com.collegeproject.chatgptclone.repository;
 
 import com.collegeproject.chatgptclone.model.ChatMessage;
@@ -51,7 +50,22 @@ public interface ChatRepository extends MongoRepository<ChatMessage, String> {
      * NEW: Finds all chat messages for a specific user, ordered by timestamp.
      *
      * @param userId The ID of the user whose messages are to be retrieved.
-     * @return A list of ChatMessage objects for the given user, sorted by timestamp.
+     * @return A list of ChatMessage objects for the given user, sorted by
+     *         timestamp.
      */
     List<ChatMessage> findByUserIdOrderByTimestampAsc(String userId);
+
+    /**
+     * Finds the last 10 chat messages for a specific user, ordered by timestamp
+     * descending.
+     * Used for building conversational context.
+     */
+    List<ChatMessage> findTop10ByUserIdOrderByTimestampDesc(String userId);
+
+    /**
+     * Finds the last 5 chat messages for a specific user, ordered by timestamp
+     * descending.
+     * Used for optimized conversational context.
+     */
+    List<ChatMessage> findTop5ByUserIdOrderByTimestampDesc(String userId);
 }

@@ -29,10 +29,11 @@ public class AuthController {
     // and the client-side JavaScript will read the error/logout parameters.
     @GetMapping("/login")
     public String showLoginPage(@RequestParam(value = "error", required = false) String error,
-                                @RequestParam(value = "logout", required = false) String logout,
-                                @RequestParam(value = "registered", required = false) String registered, // NEW: Handle registered param
-                                Model model) {
-        // These 'model.addAttribute' lines are technically for JSP, but won't harm for HTML.
+            @RequestParam(value = "logout", required = false) String logout,
+            @RequestParam(value = "registered", required = false) String registered, // NEW: Handle registered param
+            Model model) {
+        // These 'model.addAttribute' lines are technically for JSP, but won't harm for
+        // HTML.
         // The JavaScript in login.html will now read these from URL params.
         if (error != null) {
             model.addAttribute("errorMessage", "Invalid username or password.");
@@ -43,13 +44,15 @@ public class AuthController {
         if (registered != null) { // NEW: Add success message for registration
             model.addAttribute("successMessage", "Registration successful! Please log in.");
         }
-        // IMPORTANT: The return "login" here should correspond to your new static HTML file path.
-        // If your static file is at src/main/resources/static/login.html, Spring will find it.
+        // IMPORTANT: The return "login" here should correspond to your new static HTML
+        // file path.
+        // If your static file is at src/main/resources/static/login.html, Spring will
+        // find it.
         return "login.html"; // Ensure this returns the HTML file directly
     }
 
-
-    // No changes needed for @GetMapping("/signup") as it just returns the view name.
+    // No changes needed for @GetMapping("/signup") as it just returns the view
+    // name.
     @GetMapping("/signup")
     public String showSignupPage(Model model) {
         model.addAttribute("user", new User()); // Still useful if you map a 'signup.html' directly
@@ -61,10 +64,10 @@ public class AuthController {
         User registeredUser = userService.registerNewUser(user.getUsername(), user.getPassword());
         if (registeredUser != null) {
             // Changed from flash attribute to query parameter for static HTML
-            return "redirect:/login.html?registered=true";
+            return "redirect:/login?registered=true";
         } else {
             // Changed from flash attribute to query parameter for static HTML
-            return "redirect:/signup.html?error=username_exists"; // You can use 'error' or a specific error code
+            return "redirect:/signup?error=username_exists"; // You can use 'error' or a specific error code
         }
     }
 
@@ -84,4 +87,3 @@ public class AuthController {
         return response;
     }
 }
-

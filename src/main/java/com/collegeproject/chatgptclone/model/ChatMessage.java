@@ -22,6 +22,7 @@ public class ChatMessage {
     private String userId; // NEW: ID of the user this message belongs to
     private String sender; // e.g., "user", "bot"
     private String message;
+    private String imageBase64; // NEW: Store image data if present
     private LocalDateTime timestamp; // Timestamp when the message was created
 
     // Default constructor (required by Spring Data MongoDB)
@@ -31,10 +32,14 @@ public class ChatMessage {
 
     // Constructor for creating new messages with a userId
     public ChatMessage(String userId, String sender, String message) {
+        this(userId, sender, message, null);
+    }
+
+    public ChatMessage(String userId, String sender, String message, String imageBase64) {
         this.userId = userId;
         this.sender = sender;
         this.message = message;
+        this.imageBase64 = imageBase64;
         this.timestamp = LocalDateTime.now(); // Set timestamp on creation
     }
 }
-
